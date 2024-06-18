@@ -1,0 +1,9 @@
+name: Toke-N-Smoke
+version: '${project.version}'
+main: me.oscarcusick.tokensmoke.Toke_N_Smoke
+api-version: '1.20'
+commands:
+  FreshPack:
+    description: "Spawns a fresh pack of cigarettes"
+    usage: "/FreshPack <Tier>"
+    permission: op
