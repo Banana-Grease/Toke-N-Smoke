@@ -99,7 +99,9 @@ public class CigaretteUseListener implements Listener {
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int)(3.5*20)+CurrentSpeedDuration, 0, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.SLOW); // remove opposing effect (if it's there)
                 // increase food bar
-                event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 1);
+                if (event.getPlayer().getFoodLevel() < 20) {
+                    event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 1);
+                }
                 // head-spin (prevent spamming)
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20)+CurrentConfusionDuration, 1, false, false, false));
                 break;
@@ -111,7 +113,9 @@ public class CigaretteUseListener implements Listener {
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (2*20)+CurrentRegenDuration, 1, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.POISON); // remove opposing effect (if it's there)
                 // increase food bar
-                event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
+                if (event.getPlayer().getFoodLevel() < 20) {
+                    event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
+                }
                 // head-spin (prevent spamming)
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20)+CurrentConfusionDuration, 1, false, false, false));
                 break;
@@ -123,7 +127,9 @@ public class CigaretteUseListener implements Listener {
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int)(1.5*20)+CurrentRegenDuration, 2, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.POISON); // remove opposing effect (if it's there)
                 // increase food bar
-                event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
+                if (event.getPlayer().getFoodLevel() < 20) {
+                    event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
+                }
                 // head-spin (prevent spamming)
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int)(1.5*20)+CurrentConfusionDuration, 2, false, false, false));
                 break;
