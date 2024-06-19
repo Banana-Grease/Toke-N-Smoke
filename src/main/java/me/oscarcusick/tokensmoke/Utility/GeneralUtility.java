@@ -74,4 +74,13 @@ public class GeneralUtility {
         ResultButton.setItemMeta(ResultButtonMeta);
         return ResultButton;
     }
+
+    // returns true if SecondStr is close enough to OriginalStr
+    public boolean Compare(String OriginalStr, String SecondStr) {
+        // if that portion of original equals second, return true || if the OriginalStr contains second
+        if (OriginalStr.toLowerCase().contains(SecondStr.toLowerCase())) {
+            return true;
+        }
+        return false;
+    }
 }
