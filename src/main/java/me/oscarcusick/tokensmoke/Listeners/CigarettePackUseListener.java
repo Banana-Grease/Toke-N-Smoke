@@ -35,6 +35,9 @@ public class CigarettePackUseListener implements Listener {
         if (event.getItem().getItemMeta().getLore().get(1).contains("Puffs")) { // make sure the item lore does not contain the word 'Puffs'
             return;
         }
+        if (event.getItem().getAmount() > 1) {
+            return;
+        }
 
         CigarettePack CP = new CigarettePack(PluginInstance);
         int PackSize = CP.GetPackSize(event.getItem());

@@ -28,6 +28,14 @@ public class DrugCommandExecutor implements CommandExecutor {
         }
 
         switch (strings[0].toLowerCase()) {
+            case "joint":
+                Joint JointClass = new Joint(PluginInstance);
+                GiveItem((Player) commandSender, JointClass.GetJointItem(1));
+                break;
+            case "quality_joint":
+                Joint QualityJointClass = new Joint(PluginInstance);
+                GiveItem((Player) commandSender, QualityJointClass.GetJointItem(2));
+                break;
             case "meth":
                 CrystalMeth Meth = new CrystalMeth(PluginInstance);
                 GiveItem((Player) commandSender, Meth.GetMethItem());

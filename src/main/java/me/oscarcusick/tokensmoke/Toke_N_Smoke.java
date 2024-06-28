@@ -2,14 +2,20 @@ package me.oscarcusick.tokensmoke;
 
 import me.oscarcusick.tokensmoke.Commands.Executors.DrugCommandExecutor;
 import me.oscarcusick.tokensmoke.Commands.Executors.FreshPackCommandExecutor;
+import me.oscarcusick.tokensmoke.Commands.Executors.GetOpiumSeedsCommandExecutor;
+import me.oscarcusick.tokensmoke.Commands.Executors.GetWeedSeedsCommandExecutor;
 import me.oscarcusick.tokensmoke.Commands.TabCompleters.DrugCommandTabCompleter;
 import me.oscarcusick.tokensmoke.Data.Drugs.*;
 import me.oscarcusick.tokensmoke.Data.Items.CigarettePack;
-import me.oscarcusick.tokensmoke.Listeners.AddCigarettesToLootTableListener;
-import me.oscarcusick.tokensmoke.Listeners.CigarettePackUseListener;
+import me.oscarcusick.tokensmoke.Data.Items.Opium;
+import me.oscarcusick.tokensmoke.Data.Items.WeedBud;
+import me.oscarcusick.tokensmoke.Data.Plants.Crops.PlantCrop;
+import me.oscarcusick.tokensmoke.Listeners.*;
 import me.oscarcusick.tokensmoke.Listeners.DrugUseListeners.*;
-import me.oscarcusick.tokensmoke.Listeners.NeedleCraftListener;
-import me.oscarcusick.tokensmoke.Listeners.VillagerAddDrugsListener;
+import me.oscarcusick.tokensmoke.Listeners.PlantListeners.OpiumBreakListener;
+import me.oscarcusick.tokensmoke.Listeners.PlantListeners.OpiumPlantListener;
+import me.oscarcusick.tokensmoke.Listeners.PlantListeners.WeedBreakListener;
+import me.oscarcusick.tokensmoke.Listeners.PlantListeners.WeedPlantListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,7 +27,14 @@ public final class Toke_N_Smoke extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // define custom plants
+        PlantCrop WeedPlantTier1 = new PlantCrop(this, "Weed", 1, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.LARGE_FERN);
+        PlantCrop WeedPlantTier2 = new PlantCrop(this, "Weed", 2, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.LILAC);
+        PlantCrop OpiumPlant = new PlantCrop(this, "Opium", 0, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.ALLIUM);
+
         getCommand("FreshPack").setExecutor(new FreshPackCommandExecutor(this));
+        getCommand("GetWeedSeeds").setExecutor(new GetWeedSeedsCommandExecutor(this));
+        getCommand("GetOpiumSeeds").setExecutor(new GetOpiumSeedsCommandExecutor(this));
 
         getCommand("Drug").setExecutor(new DrugCommandExecutor(this));
         getCommand("Drug").setTabCompleter(new DrugCommandTabCompleter(this));
@@ -30,8 +43,8 @@ public final class Toke_N_Smoke extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CigaretteUseListener(this), this);
 
         getServer().getPluginManager().registerEvents(new VillagerAddDrugsListener(this), this);
-        getServer().getPluginManager().registerEvents(new AddCigarettesToLootTableListener(this), this);
-        getServer().getPluginManager().registerEvents(new NeedleCraftListener(this), this);
+        getServer().getPluginManager().registerEvents(new AddItemsToLootTableListener(this), this);
+        getServer().getPluginManager().registerEvents(new PreventAccidentalCraftListener(this), this);
 
         getServer().getPluginManager().registerEvents(new CrystalMethUseListener(this), this);
         getServer().getPluginManager().registerEvents(new CocaineUseListener(this), this);
@@ -40,6 +53,14 @@ public final class Toke_N_Smoke extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new KetamineUseListener(this), this);
         getServer().getPluginManager().registerEvents(new FentanylUseListener(this), this);
         getServer().getPluginManager().registerEvents(new FlunitrazepamUseListener(this), this);
+        getServer().getPluginManager().registerEvents(new JointUseListener(this), this);
+
+        getServer().getPluginManager().registerEvents(new DrugSellListener(this), this);
+
+        getServer().getPluginManager().registerEvents(new WeedPlantListener(this, WeedPlantTier1, WeedPlantTier2), this);
+        getServer().getPluginManager().registerEvents(new WeedBreakListener(this), this);
+        getServer().getPluginManager().registerEvents(new OpiumPlantListener(this, OpiumPlant), this);
+        getServer().getPluginManager().registerEvents(new OpiumBreakListener(this), this);
 
         // Recipes
         CigarettePack CP = new CigarettePack(this);
@@ -48,6 +69,20 @@ public final class Toke_N_Smoke extends JavaPlugin {
         SteveNSonsRecipe.setIngredient('A', Material.PAPER);
         SteveNSonsRecipe.setIngredient('B', Material.DRIED_KELP_BLOCK);
         Bukkit.addRecipe(SteveNSonsRecipe);
+
+        Joint JointClass = new Joint(this);
+        WeedBud WB = new WeedBud(this);
+        ShapedRecipe JointRecipe = new ShapedRecipe(new NamespacedKey(this, "Joint"), JointClass.GetJointItem(1));
+        JointRecipe.shape("AAA", "BBB", "AAA");
+        JointRecipe.setIngredient('A', Material.PAPER);
+        JointRecipe.setIngredient('B', WB.GetItem(1).getType());
+        Bukkit.addRecipe(JointRecipe);
+
+        ShapedRecipe QualityJointRecipe = new ShapedRecipe(new NamespacedKey(this, "QualityJoint"), JointClass.GetJointItem(2));
+        QualityJointRecipe.shape("AAA", "BBB", "AAA");
+        QualityJointRecipe.setIngredient('A', Material.PAPER);
+        QualityJointRecipe.setIngredient('B', WB.GetItem(2).getType());
+        Bukkit.addRecipe(QualityJointRecipe);
 
         Cocaine CocaineClass = new Cocaine(this);
         ShapelessRecipe CocaineRecipe = new ShapelessRecipe(new NamespacedKey(this, "Cocaine"), CocaineClass.GetCocaineItem());
@@ -63,11 +98,12 @@ public final class Toke_N_Smoke extends JavaPlugin {
         MethRecipe.addIngredient(Material.REDSTONE);
         Bukkit.addRecipe(MethRecipe);
 
+        Opium OpiumClass = new Opium(this);
         Heroin HeroinClass = new Heroin(this);
         ShapelessRecipe HeroinRecipe = new ShapelessRecipe(new NamespacedKey(this, "Heroin"), HeroinClass.GetHeroinItem(false));
-        HeroinRecipe.addIngredient(Material.BLAZE_POWDER);
-        HeroinRecipe.addIngredient(Material.SPIDER_EYE);
+        HeroinRecipe.addIngredient(Material.NETHER_WART);
         HeroinRecipe.addIngredient(Material.GLOWSTONE_DUST);
+        HeroinRecipe.addIngredient(OpiumClass.GetOpiumItem().getType());
         Bukkit.addRecipe(HeroinRecipe);
 
         // from powder to needle
@@ -80,7 +116,7 @@ public final class Toke_N_Smoke extends JavaPlugin {
         ShapelessRecipe FentanylRecipe = new ShapelessRecipe(new NamespacedKey(this, "Fentanyl"), FentanylClass.GetFentanylItem(false));
         FentanylRecipe.addIngredient(Material.NETHER_WART);
         FentanylRecipe.addIngredient(Material.GUNPOWDER);
-        FentanylRecipe.addIngredient(Material.BLAZE_POWDER);
+        FentanylRecipe.addIngredient(OpiumClass.GetOpiumItem().getType());
         Bukkit.addRecipe(FentanylRecipe);
 
         // from powder to needle
@@ -97,6 +133,7 @@ public final class Toke_N_Smoke extends JavaPlugin {
         FlunitrazepamRecipe.addIngredient(Material.ENDER_PEARL);
         FlunitrazepamRecipe.addIngredient(Material.CACTUS);
         FlunitrazepamRecipe.addIngredient(Material.GUNPOWDER);
+        FlunitrazepamRecipe.addIngredient(OpiumClass.GetOpiumItem().getType());
         Bukkit.addRecipe(FlunitrazepamRecipe);
 
         // from powder to needle

@@ -43,8 +43,8 @@ public class VillagerAddDrugsListener implements Listener {
 
         if ((((int) (Math.floor(Math.random() * 2) + 1)) == 1)) { // 1 in 2 that villager will become a 'plug' and sell cigarettes
 
-            MerchantRecipe NewCigRecipe = new MerchantRecipe(CP.GetFreshPack(2), 1, 20, false, 5, 1, 1, 3);
-            NewCigRecipe.addIngredient(new ItemStack(Material.EMERALD, 6));
+            MerchantRecipe NewCigRecipe = new MerchantRecipe(CP.GetFreshPack(2), 1, 128, true, 5, .3f, 1, 3);
+            NewCigRecipe.addIngredient(new ItemStack(Material.EMERALD, 5));
 
             event.getEntity().setRecipe(0, NewCigRecipe);
         }
@@ -52,13 +52,13 @@ public class VillagerAddDrugsListener implements Listener {
         if (SpawnedVillager.getRecipes().get(0).getResult().equals(CP.GetFreshPack(2))) { // if the first trade is cigarettes add the rest
 
             Morphine MorphineClass = new Morphine(PluginInstance);
-            MerchantRecipe NewMorphineRecipe = new MerchantRecipe(MorphineClass.GetMorphineItem(false), 1, 20, false, 5, 1, 0, 5);
-            NewMorphineRecipe.addIngredient(new ItemStack(Material.EMERALD, 15));
+            MerchantRecipe NewMorphineRecipe = new MerchantRecipe(MorphineClass.GetMorphineItem(false), 1, 128, true, 5, .3f, 0, 9);
+            NewMorphineRecipe.addIngredient(new ItemStack(Material.EMERALD, 25));
             event.getEntity().setRecipe(1, NewMorphineRecipe);
 
             Ketamine KetamineClass = new Ketamine(PluginInstance);
-            MerchantRecipe NewKetamineRecipe = new MerchantRecipe(KetamineClass.GetKetamineItem(false), 1, 20, false, 5, 1, 0, 5);
-            NewKetamineRecipe.addIngredient(new ItemStack(Material.EMERALD, 15));
+            MerchantRecipe NewKetamineRecipe = new MerchantRecipe(KetamineClass.GetKetamineItem(false), 1, 128, true, 5, .3f, 0, 9);
+            NewKetamineRecipe.addIngredient(new ItemStack(Material.EMERALD, 25));
             event.getEntity().setRecipe(2, NewKetamineRecipe);
 
         }

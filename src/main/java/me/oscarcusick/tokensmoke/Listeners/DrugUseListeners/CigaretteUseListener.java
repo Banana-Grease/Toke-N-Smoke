@@ -60,24 +60,6 @@ public class CigaretteUseListener implements Listener {
             event.getPlayer().getWorld().spawnParticle(Particle.WHITE_SMOKE, event.getPlayer().getLocation().getX(), event.getPlayer().getLocation().getY() + 1.5, event.getPlayer().getLocation().getZ(), 15, 0, 0, 0, .03, null, false);
         }
 
-        if (PuffsRemaining <= 1) { // if the cigarette has one puff left turn it's item type into a wooden button and change lore / name
-            // change item lore
-
-            Meta.setDisplayName(ChatColor.DARK_GRAY + "Cigarette Butt");
-
-            Lore.set(0, "A Cigarette Butt");
-            Lore.remove(1);
-
-            Meta.setLore(Lore);
-            event.getItem().setItemMeta(Meta);
-
-            event.getItem().setType(Material.OAK_BUTTON);
-
-            event.setCancelled(true); // prevent player from placing the button on the ground
-
-            return;
-        }
-
         // reset item lore
         Lore.set(1, "Puffs Remaining: " + CigaretteClass.GetRemainingColour(event.getItem()) + (PuffsRemaining - 1)); // rename item meta to depict how many cigarettes are left
         Meta.setLore(Lore);
@@ -99,46 +81,64 @@ public class CigaretteUseListener implements Listener {
         switch (CigaretteClass.DetermineTier(event.getItem())) {
             case 1:
                 // speed effect
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int)(3.5*20)+CurrentSpeedDuration, 0, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int)(3.5*20*event.getItem().getAmount())+CurrentSpeedDuration, 0, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.SLOW); // remove opposing effect (if it's there)
                 // increase food bar
                 if (event.getPlayer().getFoodLevel() < 20) {
                     event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 1);
                 }
                 // head-spin (prevent spamming)
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20)+CurrentConfusionDuration, 1, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20*event.getItem().getAmount())+CurrentConfusionDuration, 1, false, false, false));
                 break;
             case 2:
                 // speed effect
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (5*20)+CurrentSpeedDuration, 0, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (5*20*event.getItem().getAmount())+CurrentSpeedDuration, 0, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.SLOW); // remove opposing effect (if it's there)
                 // regeneration effect
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (2*20)+CurrentRegenDuration, 1, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (2*20*event.getItem().getAmount())+CurrentRegenDuration, 1, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.POISON); // remove opposing effect (if it's there)
                 // increase food bar
                 if (event.getPlayer().getFoodLevel() < 20) {
                     event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
                 }
                 // head-spin (prevent spamming)
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20)+CurrentConfusionDuration, 1, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (2*20*event.getItem().getAmount())+CurrentConfusionDuration, 1, false, false, false));
                 break;
             case 3:
                 // speed effect
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (7*20)+CurrentSpeedDuration, 1, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (7*20*event.getItem().getAmount())+CurrentSpeedDuration, 1, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.SLOW); // remove opposing effect (if it's there)
                 // regeneration effect
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int)(1.5*20)+CurrentRegenDuration, 2, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int)(1.5*20*event.getItem().getAmount())+CurrentRegenDuration, 2, false, false, false));
                 event.getPlayer().removePotionEffect(PotionEffectType.POISON); // remove opposing effect (if it's there)
                 // increase food bar
                 if (event.getPlayer().getFoodLevel() < 20) {
                     event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 2);
                 }
                 // head-spin (prevent spamming)
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int)(1.5*20)+CurrentConfusionDuration, 2, false, false, false));
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int)(1.5*20*event.getItem().getAmount())+CurrentConfusionDuration, 2, false, false, false));
                 break;
             default:
                 System.out.println("Error Swtich Statement (CigaretteUseListener.java)");
                 break;
+        }
+
+        if (PuffsRemaining <= 1) { // if the cigarette has one puff left turn it's item type into a wooden button and change lore / name
+            // change item lore
+
+            Meta.setDisplayName(ChatColor.DARK_GRAY + "Cigarette Butt");
+
+            Lore.set(0, "A Cigarette Butt");
+            Lore.remove(1);
+
+            Meta.setLore(Lore);
+            event.getItem().setItemMeta(Meta);
+
+            event.getItem().setType(Material.OAK_BUTTON);
+
+            event.setCancelled(true); // prevent player from placing the button on the ground
+
+            return;
         }
 
         event.setCancelled(true); // prevent player from placing the torches

@@ -21,6 +21,9 @@ public class DrugCommandTabCompleter implements TabCompleter {
         List<String> OptionsList = new ArrayList();
         List<String> ReturnList = new ArrayList();
 
+        OptionsList.add("Joint");
+        OptionsList.add("Quality_Joint");
+
         OptionsList.add("Meth");
 
         OptionsList.add("Cocaine");

@@ -11,3 +11,11 @@ commands:
     description: "Gives the player whatever drug for debugging purposes"
     usage: "/Drug <Name>"
     permission: op
+  GetWeedSeeds:
+    description: "Gives the player weed seeds"
+    usage: "/GetWeedSeeds <Tier>"
+    permission: op
+  GetOpiumSeeds:
+    description: "Gives the player opium seeds"
+    usage: "/GetWeedSeeds"
+    permission: op
