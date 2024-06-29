@@ -12,10 +12,7 @@ import me.oscarcusick.tokensmoke.Data.Items.WeedBud;
 import me.oscarcusick.tokensmoke.Data.Plants.Crops.PlantCrop;
 import me.oscarcusick.tokensmoke.Listeners.*;
 import me.oscarcusick.tokensmoke.Listeners.DrugUseListeners.*;
-import me.oscarcusick.tokensmoke.Listeners.PlantListeners.OpiumBreakListener;
-import me.oscarcusick.tokensmoke.Listeners.PlantListeners.OpiumPlantListener;
-import me.oscarcusick.tokensmoke.Listeners.PlantListeners.WeedBreakListener;
-import me.oscarcusick.tokensmoke.Listeners.PlantListeners.WeedPlantListener;
+import me.oscarcusick.tokensmoke.Listeners.PlantListeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -57,6 +54,7 @@ public final class Toke_N_Smoke extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new DrugSellListener(this), this);
 
+        getServer().getPluginManager().registerEvents(new AntiBoneMealEventListener(this), this);
         getServer().getPluginManager().registerEvents(new WeedPlantListener(this, WeedPlantTier1, WeedPlantTier2), this);
         getServer().getPluginManager().registerEvents(new WeedBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new OpiumPlantListener(this, OpiumPlant), this);

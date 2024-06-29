@@ -1,6 +1,7 @@
 package me.oscarcusick.tokensmoke.Data.Items;
 
 import me.oscarcusick.tokensmoke.Utility.GeneralUtility;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -47,7 +48,7 @@ public class WeedBud {
                 return null;
         }
 
-        return GU.GenerateItemStack(FinalMaterial, "Weed Bud", Lore, Amount);
+        return GU.GenerateItemStack(FinalMaterial, ChatColor.GREEN + "Weed Bud", Lore, Amount);
     }
 
     public ItemStack GetItem(int Tier) {

@@ -46,41 +46,48 @@ public class DrugSellListener implements Listener {
 
             // Heroin & Fentanyl
             if (ItemSlot.isSimilar(HeroinClass.GetHeroinItem(false)) || ItemSlot.isSimilar(FentanylClass.GetFentanylItem(false))) {
-                Payment = 11 * ItemSlot.getAmount();
+                Payment += 11 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
             // Cocaine & Meth
             if (ItemSlot.isSimilar(CocaineClass.GetCocaineItem()) || ItemSlot.isSimilar(MethClass.GetMethItem())) {
-                Payment = 8 * ItemSlot.getAmount();
+                Payment += 8 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
             // Opium
             if (ItemSlot.isSimilar(OpiumClass.GetOpiumItem())) {
-                Payment = 2 * ItemSlot.getAmount();
+                Payment += 2 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
 
             // Weed Tier 1
             if (ItemSlot.isSimilar(WeedBudClass.GetItem(1))) {
-                Payment = 1 * ItemSlot.getAmount();
+                Payment += 1 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
             // Weed Tier 2
             if (ItemSlot.isSimilar(WeedBudClass.GetItem(2))) {
-                Payment = 3.5f * ItemSlot.getAmount();
+                Payment += 3.5f * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
 
             // Joint
             if (ItemSlot.isSimilar(JointClass.GetJointItem(1))) {
-                Payment = 4 * ItemSlot.getAmount();
+                Payment += 4 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
             }
             // Quality Joint
             if (ItemSlot.isSimilar(JointClass.GetJointItem(2))) {
-                Payment = 12 * ItemSlot.getAmount();
-            }
-
-            if (Payment > 0) {
+                Payment += 12 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
             }
-            ClickedVillager.getWorld().dropItem(ClickedVillager.getLocation(), new ItemStack(Material.EMERALD, (int)Payment));
-            Payment = 0;
         }
+
+        // 25% variation each direction. affects final price only not for each item
+        float PriceVariation = (int) (Math.floor(Math.random() * 51)) - 25;
+        PriceVariation = Payment * (PriceVariation / 100);
+
+        ClickedVillager.getWorld().dropItem(ClickedVillager.getLocation(), new ItemStack(Material.EMERALD, (int)(Payment + PriceVariation)));
     }
 
 }

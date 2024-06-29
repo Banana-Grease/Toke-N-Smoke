@@ -1,6 +1,7 @@
 package me.oscarcusick.tokensmoke.Data.Items;
 
 import me.oscarcusick.tokensmoke.Utility.GeneralUtility;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -19,6 +20,6 @@ public class WeedStem {
         ArrayList<String> Lore = new ArrayList<>();
         Lore.add("The Stem Of A Marijuana Plant");
 
-        return GU.GenerateItemStack(Material.BAMBOO, "Weed Stem", Lore, Amount);
+        return GU.GenerateItemStack(Material.BAMBOO, ChatColor.RESET + "Weed Stem", Lore, Amount);
     }
 }

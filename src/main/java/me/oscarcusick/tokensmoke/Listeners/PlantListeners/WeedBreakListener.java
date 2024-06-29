@@ -2,6 +2,7 @@ package me.oscarcusick.tokensmoke.Listeners.PlantListeners;
 
 import me.oscarcusick.tokensmoke.Data.Items.WeedBud;
 import me.oscarcusick.tokensmoke.Data.Items.WeedSeed;
+import me.oscarcusick.tokensmoke.Data.Items.WeedStem;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -47,13 +48,16 @@ public class WeedBreakListener implements Listener {
         if (event.getBlock().hasMetadata("WeedTier1") || event.getBlock().hasMetadata("WeedTier2")) {
             WeedBud WB = new WeedBud(PluginInstance);
             WeedSeed WS = new WeedSeed(PluginInstance);
+            WeedStem WStem = new WeedStem(PluginInstance);
             if (event.getBlock().getType().equals(Material.LARGE_FERN)) { // THIS CHECK WILL NOT WORK
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(1, ((int) (Math.floor(Math.random() * 3) + 1)))); // weed bud
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(1, ((int) (Math.floor(Math.random() * 2) + 1)))); // seed
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 3) + 1)))); // stem
             }
             else if (event.getBlock().getType().equals(Material.LILAC)) {
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(2, ((int) (Math.floor(Math.random() * 3) + 1)))); // weed bud
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(2, ((int) (Math.floor(Math.random() * 2) + 1)))); // seed
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 4) + 1)))); // stem
             }
         }
 
