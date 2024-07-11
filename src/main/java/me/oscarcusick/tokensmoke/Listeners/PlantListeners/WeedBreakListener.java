@@ -24,6 +24,10 @@ public class WeedBreakListener implements Listener {
     // testing metadata
     @EventHandler(priority = EventPriority.HIGH)
     public void TestMetaData(PlayerInteractEvent event) {
+        if (!event.getPlayer().isOp()) {
+            return;
+        }
+
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
         }
@@ -50,14 +54,14 @@ public class WeedBreakListener implements Listener {
             WeedSeed WS = new WeedSeed(PluginInstance);
             WeedStem WStem = new WeedStem(PluginInstance);
             if (event.getBlock().getType().equals(Material.LARGE_FERN)) { // THIS CHECK WILL NOT WORK
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(1, ((int) (Math.floor(Math.random() * 3) + 1)))); // weed bud
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(1, ((int) (Math.floor(Math.random() * 2) + 1)))); // seed
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 3) + 1)))); // stem
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(1, ((int) (Math.floor(Math.random() * 12) + 3)))); // weed bud
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(1, ((int) (Math.floor(Math.random() * 5) + 1)))); // seed
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 6) + 1)))); // stem
             }
             else if (event.getBlock().getType().equals(Material.LILAC)) {
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(2, ((int) (Math.floor(Math.random() * 3) + 1)))); // weed bud
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(2, ((int) (Math.floor(Math.random() * 2) + 1)))); // seed
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 4) + 1)))); // stem
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WB.GetItem(2, ((int) (Math.floor(Math.random() * 12) + 3)))); // weed bud
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WS.GetItem(2, ((int) (Math.floor(Math.random() * 5) + 1)))); // seed
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), WStem.GetItem(((int) (Math.floor(Math.random() * 8) + 1)))); // stem
             }
         }
 

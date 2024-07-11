@@ -24,6 +24,10 @@ public class OpiumBreakListener implements Listener {
     // testing metadata
     @EventHandler(priority = EventPriority.HIGH)
     public void TestMetaData(PlayerInteractEvent event) {
+        if (!event.getPlayer().isOp()) {
+            return;
+        }
+
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
         }
@@ -42,8 +46,8 @@ public class OpiumBreakListener implements Listener {
             Opium OpiumClass = new Opium(PluginInstance);
             OpiumSeed OS = new OpiumSeed(PluginInstance);
             if (event.getBlock().getType().equals(Material.ALLIUM)) {
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), OpiumClass.GetOpiumItem()); // Opium
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), OS.GetItem(((int) (Math.floor(Math.random() * 2) + 1)))); // seed
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), OpiumClass.GetOpiumItem(((int) (Math.floor(Math.random() * 5) + 2)))); // Opium (2 up to 5)
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), OS.GetItem(((int) (Math.floor(Math.random() * 3) + 1)))); // seed
             }
         }
 

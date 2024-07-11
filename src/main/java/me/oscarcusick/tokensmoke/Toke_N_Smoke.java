@@ -20,14 +20,21 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 public final class Toke_N_Smoke extends JavaPlugin {
 
     @Override
     public void onEnable() {
         // define custom plants
-        PlantCrop WeedPlantTier1 = new PlantCrop(this, "Weed", 1, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.LARGE_FERN);
-        PlantCrop WeedPlantTier2 = new PlantCrop(this, "Weed", 2, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.LILAC);
-        PlantCrop OpiumPlant = new PlantCrop(this, "Opium", 0, Material.PUMPKIN_STEM, Material.PUMPKIN_STEM, Material.ALLIUM);
+        PlantCrop WeedPlantTier1 = new PlantCrop(this, "Weed", 1, Material.PUMPKIN_STEM, 2, Material.PUMPKIN_STEM, 5, Material.LARGE_FERN, 0);
+        PlantCrop WeedPlantTier2 = new PlantCrop(this, "Weed", 2, Material.PUMPKIN_STEM, 3, Material.PUMPKIN_STEM, 6, Material.LILAC, 0);
+        PlantCrop OpiumPlant = new PlantCrop(this, "Opium", 0, Material.PUMPKIN_STEM, 1, Material.PUMPKIN_STEM, 4, Material.ALLIUM, 0);
+
+        ArrayList<PlantCrop> AllCustomPlants = new ArrayList<>();
+        AllCustomPlants.add(WeedPlantTier1);
+        AllCustomPlants.add(WeedPlantTier2);
+        AllCustomPlants.add(OpiumPlant);
 
         getCommand("FreshPack").setExecutor(new FreshPackCommandExecutor(this));
         getCommand("GetWeedSeeds").setExecutor(new GetWeedSeedsCommandExecutor(this));
@@ -42,6 +49,7 @@ public final class Toke_N_Smoke extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VillagerAddDrugsListener(this), this);
         getServer().getPluginManager().registerEvents(new AddItemsToLootTableListener(this), this);
         getServer().getPluginManager().registerEvents(new PreventAccidentalCraftListener(this), this);
+        getServer().getPluginManager().registerEvents(new FixPlantMetaOnChunkLoadListener(this, AllCustomPlants), this);
 
         getServer().getPluginManager().registerEvents(new CrystalMethUseListener(this), this);
         getServer().getPluginManager().registerEvents(new CocaineUseListener(this), this);

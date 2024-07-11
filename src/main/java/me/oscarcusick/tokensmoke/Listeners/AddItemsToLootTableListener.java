@@ -29,7 +29,6 @@ public class AddItemsToLootTableListener implements Listener {
         }
         if ((((int) (Math.floor(Math.random() * 5) + 1)) == 1)) { // 1 in 5 that any loot-table based chest will have the seeds in
             WeedSeed WS = new WeedSeed(PluginInstance);
-            PluginInstance.getServer().broadcastMessage("Generated Weed Seeds");
             event.getLoot().add(WS.GetItem(2, (int) (Math.floor(Math.random() * 3) + 1)));
         }
     }

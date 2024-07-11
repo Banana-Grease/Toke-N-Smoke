@@ -3,6 +3,7 @@ package me.oscarcusick.tokensmoke.Listeners.PlantListeners;
 import me.oscarcusick.tokensmoke.Data.Items.OpiumSeed;
 import me.oscarcusick.tokensmoke.Data.Items.WeedSeed;
 import me.oscarcusick.tokensmoke.Data.Plants.Crops.PlantCrop;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
@@ -30,21 +31,35 @@ public class OpiumPlantListener implements Listener {
     // it also grows the plant as needed
     @EventHandler
     public void OpiumGrowth(BlockGrowEvent event) {
-        if (event.getBlock().hasMetadata("Opium")) {
-            event.setCancelled(true);
-            Ageable BlockData = (Ageable) event.getBlock().getBlockData();
+        Block GrowBlock = event.getBlock();
+        if (!(GrowBlock.getType().equals(OpiumPlant.Stage1Block) || GrowBlock.getType().equals(OpiumPlant.Stage2Block))) {
+            return;
+        }
+        Ageable BlockData = (Ageable) GrowBlock.getBlockData();
 
-            if (BlockData.getAge() < BlockData.getMaximumAge()-1) { // AGE IT TO SECOND STAGE
-                BlockData.setAge(BlockData.getMaximumAge()-1);
-                event.getBlock().setBlockData(BlockData);
+        // make sure its growing on podzol
+        if (!GrowBlock.getWorld().getBlockAt(GrowBlock.getX(), GrowBlock.getY()-1, GrowBlock.getZ()).getType().equals(Material.PODZOL)) {
+            return;
+        }
+        // make sure it's Opium
+        if (BlockData.getAge() == OpiumPlant.Stage1BlockAge || BlockData.getAge() == OpiumPlant.Stage2BlockAge) {
+            event.setCancelled(true);
+
+            { // age to third and last stage
+                if (BlockData.getAge() == OpiumPlant.Stage2BlockAge) {
+                    GrowBlock.setType(Material.ALLIUM, false);
+                    GrowBlock.setMetadata("Opium", new FixedMetadataValue(PluginInstance, "Value"));
+                }
             }
 
-            else if (BlockData.getAge() >= BlockData.getMaximumAge()-1) { // AGE IT TO THIRD AND LAST STAGE. NEED TO FIX UPPER BLOCK NOT LOOKING GOOD
-                if (event.getBlock().hasMetadata("Opium")) {
-                    event.getBlock().setType(Material.ALLIUM, false);
+            { // age to second stage
+                if (BlockData.getAge() == OpiumPlant.Stage1BlockAge) {
+                    BlockData.setAge(OpiumPlant.Stage2BlockAge);
+                    GrowBlock.setBlockData(BlockData);
                 }
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.LOW) // run this event last
@@ -52,11 +67,17 @@ public class OpiumPlantListener implements Listener {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        OpiumSeed OS = new OpiumSeed(PluginInstance);
-        if (!event.getPlayer().getInventory().getItemInMainHand().equals(OS.GetItem())) { // make sure it's an opium seed
+        if (event.getItem() == null) {
             return;
         }
-        if (!event.getClickedBlock().getType().equals(Material.FARMLAND)) { // make sure its farmland
+        OpiumSeed OS = new OpiumSeed(PluginInstance);
+        if (event.getItem().isSimilar(OS.GetItem())) {
+            event.setCancelled(true);
+        }
+        if (!event.getPlayer().getInventory().getItemInMainHand().isSimilar(OS.GetItem())) { // make sure it's an opium seed
+            return;
+        }
+        if (!event.getClickedBlock().getType().equals(Material.PODZOL)) { // make sure it's Podzol
             return;
         }
         TargetBlock = event.getPlayer().getWorld().getBlockAt(event.getClickedBlock().getLocation().getBlockX(), event.getClickedBlock().getLocation().getBlockY()+1, event.getClickedBlock().getLocation().getBlockZ());
@@ -87,8 +108,11 @@ public class OpiumPlantListener implements Listener {
         TargetBlock.setType(OpiumPlant.Stage1Block, false);
         // increment age
         Ageable OpiumData = (Ageable) TargetBlock.getBlockData();
-        OpiumData.setAge(OpiumData.getAge()+1);
+        OpiumData.setAge(OpiumPlant.Stage1BlockAge);
         TargetBlock.setBlockData(OpiumData);
         TargetBlock.setMetadata("Opium", new FixedMetadataValue(PluginInstance, "Value"));
+
+        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1); // remove 1 seed
     }
 }

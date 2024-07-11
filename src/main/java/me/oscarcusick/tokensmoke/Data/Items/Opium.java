@@ -14,7 +14,7 @@ public class Opium {
         this.PluginInstance = PluginInstance;
     }
 
-    public ItemStack GetOpiumItem() {
+    public ItemStack GetOpiumItem(int Amount) {
         GeneralUtility GU = new GeneralUtility(PluginInstance);
 
         // Lore
@@ -22,6 +22,10 @@ public class Opium {
         Lore.add("Opium");
         Lore.add("Commonly Used To Manufacture Drugs");
 
-        return GU.GenerateItemStack(Material.SNOWBALL, ChatColor.YELLOW + "Opium", Lore, 1);
+        return GU.GenerateItemStack(Material.SNOWBALL, ChatColor.YELLOW + "Opium", Lore, Amount);
+    }
+
+    public ItemStack GetOpiumItem() {
+        return GetOpiumItem(1);
     }
 }
