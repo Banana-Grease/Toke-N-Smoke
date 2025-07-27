@@ -28,7 +28,10 @@ public class DrugSellListener implements Listener {
             return;
         }
 
+
         // all sellable items to nitwits
+        Morphine MorphineClass = new Morphine(PluginInstance);
+        Ketamine KetamineClass = new Ketamine(PluginInstance);
         Heroin HeroinClass = new Heroin(PluginInstance);
         Fentanyl FentanylClass = new Fentanyl(PluginInstance);
         Cocaine CocaineClass = new Cocaine(PluginInstance);
@@ -46,40 +49,53 @@ public class DrugSellListener implements Listener {
 
             // Heroin & Fentanyl
             if (ItemSlot.isSimilar(HeroinClass.GetHeroinItem(false)) || ItemSlot.isSimilar(FentanylClass.GetFentanylItem(false))) {
-                Payment += 11 * ItemSlot.getAmount();
+                Payment += 8 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("H&F");
+            }
+            // Morphine & Ketamine
+            if (ItemSlot.isSimilar(MorphineClass.GetMorphineItem(false)) || ItemSlot.isSimilar(KetamineClass.GetKetamineItem(false))) {
+                Payment += 12 * ItemSlot.getAmount();
+                ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("M&K");
             }
             // Cocaine & Meth
             if (ItemSlot.isSimilar(CocaineClass.GetCocaineItem()) || ItemSlot.isSimilar(MethClass.GetMethItem())) {
-                Payment += 8 * ItemSlot.getAmount();
+                Payment += 7 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("C&M");
             }
             // Opium
             if (ItemSlot.isSimilar(OpiumClass.GetOpiumItem())) {
-                Payment += 2 * ItemSlot.getAmount();
+                Payment += 3 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("O");
             }
 
             // Weed Tier 1
             if (ItemSlot.isSimilar(WeedBudClass.GetItem(1))) {
-                Payment += 1 * ItemSlot.getAmount();
+                Payment += 2 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("W1");
             }
             // Weed Tier 2
             if (ItemSlot.isSimilar(WeedBudClass.GetItem(2))) {
-                Payment += 3.5f * ItemSlot.getAmount();
+                Payment += 5f * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("W2");
             }
 
             // Joint
             if (ItemSlot.isSimilar(JointClass.GetJointItem(1))) {
-                Payment += 4 * ItemSlot.getAmount();
+                Payment += 10 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("J1");
             }
             // Quality Joint
             if (ItemSlot.isSimilar(JointClass.GetJointItem(2))) {
-                Payment += 12 * ItemSlot.getAmount();
+                Payment += 28 * ItemSlot.getAmount();
                 ItemSlot.setAmount(0);
+                PluginInstance.getServer().broadcastMessage("J2");
             }
         }
 
@@ -88,6 +104,16 @@ public class DrugSellListener implements Listener {
         PriceVariation = Payment * (PriceVariation / 100);
 
         ClickedVillager.getWorld().dropItem(ClickedVillager.getLocation(), new ItemStack(Material.EMERALD, (int)(Payment + PriceVariation)));
+
+        PluginInstance.getServer().broadcastMessage("World: " + ClickedVillager.getWorld().getName());
+        PluginInstance.getServer().broadcastMessage("X: " + ClickedVillager.getLocation().getX());
+        PluginInstance.getServer().broadcastMessage("Y: " + ClickedVillager.getLocation().getY());
+        PluginInstance.getServer().broadcastMessage("Z: " + ClickedVillager.getLocation().getZ());
+
+        PluginInstance.getServer().broadcastMessage("Profession " + ClickedVillager.getProfession());
+
+        PluginInstance.getServer().broadcastMessage("Payment: " + Payment + " || Variation: " + PriceVariation);
+
     }
 
 }
